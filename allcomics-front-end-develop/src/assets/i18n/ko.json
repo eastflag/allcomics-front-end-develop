@@ -4,15 +4,13 @@
         "currency-symbol": "￦",
         "currency-name": "원",
         "genre": {
-            "all": "전체",
             "romance": "로맨스",
             "drama": "드라마",
-            "sports": "스포츠",
-            "BL": "BL",
+            "action": "소년/액션",
             "fantasy": "판타지",
-            "action": "액션",
-            "school": "학원",
-            "etc": "기타"
+            "blgl": "BL/GL",
+            "adult": "성인",
+            "best": "베스트도전"
         },
         "no-episodes": "{{no}}화",
         "all-age": "전체 이용가",
@@ -57,8 +55,9 @@
         "history": "충전 내역",
         "policy": "이용 약관",
         "privacy": "개인정보처리방침",
-        "youthpolicy": "청소년보호정책"
-
+        "youthpolicy": "청소년보호정책",
+        "title_webtoon": "웹툰",
+        "title_webnovel": "웹소설"
     },
     "main": {
         "ranking": {

@@ -32,7 +32,7 @@ export class GenreByWebtoonComponent implements OnInit, OnDestroy {
 
     // tab Info
     public tabs: { genre: string, name: string }[];
-    public readonly genres = ['all', 'romance', 'drama', 'sports', 'fantasy', 'action', 'etc'];
+    public readonly genres = ['romance', 'drama', 'action', 'fantasy', 'blgl', 'adult', 'best'];
     public selectedIndex = 0;
     public idx = 0;
 
@@ -52,7 +52,7 @@ export class GenreByWebtoonComponent implements OnInit, OnDestroy {
     private bannerList$: Observable<any>;
 
     public isFetching$: Observable<boolean>;
-    private activeGenre = 'all';
+    private activeGenre = 'romance';
 
     constructor(private comicService: ComicService,
                 private translate: TranslateService,
@@ -63,7 +63,7 @@ export class GenreByWebtoonComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.webtoonStore$.dispatch(WebtoonActions.SetActiveGenre({ genre: 'all' }));
+        this.webtoonStore$.dispatch(WebtoonActions.SetActiveGenre({ genre: 'romance' }));
         this.webtoonStore$.dispatch(WebtoonActions.FetchGenresBannerList({ params: {}, category: 'genre' }));
 
         this.setTemplateInfo();
@@ -132,6 +132,7 @@ export class GenreByWebtoonComponent implements OnInit, OnDestroy {
 
     private initTabsInfo() {
         this.tabs = this.genres.map(genre => ({ genre, name: `common.genre.${genre}` }));
+
     }
 
     private setupBottomBar() {

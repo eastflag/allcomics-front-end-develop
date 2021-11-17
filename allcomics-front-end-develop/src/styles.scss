@@ -132,6 +132,15 @@ $main-light-color: #9EDEDD;
     @extend .top-title;
     color: white;
   }
+
+  .title-text {
+    font-size: 20px;
+    cursor: pointer;
+    &.active {
+      color: #0ebebb;
+      font-weight: bold;
+    }
+  }
 }
 
 .top-logo {

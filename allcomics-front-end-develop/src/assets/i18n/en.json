@@ -57,8 +57,9 @@
         "history": "Transaction History",
         "policy": "Terms of Use",
         "privacy": "Privacy Policy",
-        "youthpolicy": "Youth Protection Policy"
-
+        "youthpolicy": "Youth Protection Policy",
+        "title_webtoon": "웹툰",
+        "title_webnovel": "웹소설"
     },
     "main": {
         "ranking": {

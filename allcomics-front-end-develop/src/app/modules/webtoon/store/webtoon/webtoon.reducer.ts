@@ -15,32 +15,30 @@ export interface WebtoonList {
     banner?: Banner;
 }
 
-export type WebtoonGenre = 'all' | 'romance' | 'drama' | 'sports' | 'BL' | 'fantasy' | 'action' | 'etc';
+export type WebtoonGenre = 'romance' | 'drama' | 'action' | 'fantasy' | 'blgl' | 'adult' | 'best';
 
 export interface State {
-    all: WebtoonList;
     romance: WebtoonList;
     drama: WebtoonList;
-    sports: WebtoonList;
-    BL: WebtoonList;
-    fantasy: WebtoonList;
     action: WebtoonList;
-    etc: WebtoonList;
+    fantasy: WebtoonList;
+    blgl: WebtoonList;
+    adult: WebtoonList;
+    best: WebtoonList;
     activeGenre: WebtoonGenre;
     bannerList: Banner[];
     isFetching: boolean;
 }
 
 export const initialState: State = {
-    all: { list: [], total: 0, page: DEFAULT_PAGE, limit: DEFAULT_LIMIT, totalPage: DEFAULT_PAGE, isInit: false, banner: null },
     romance: { list: [], total: 0, page: DEFAULT_PAGE, limit: DEFAULT_LIMIT, totalPage: DEFAULT_PAGE, isInit: false, banner: null },
     drama: { list: [], total: 0, page: DEFAULT_PAGE, limit: DEFAULT_LIMIT, totalPage: DEFAULT_PAGE, isInit: false, banner: null },
-    sports: { list: [], total: 0, page: DEFAULT_PAGE, limit: DEFAULT_LIMIT, totalPage: DEFAULT_PAGE, isInit: false, banner: null },
-    BL: { list: [], total: 0, page: DEFAULT_PAGE, limit: DEFAULT_LIMIT, totalPage: DEFAULT_PAGE, isInit: false, banner: null },
-    fantasy: { list: [], total: 0, page: DEFAULT_PAGE, limit: DEFAULT_LIMIT, totalPage: DEFAULT_PAGE, isInit: false, banner: null },
     action: { list: [], total: 0, page: DEFAULT_PAGE, limit: DEFAULT_LIMIT, totalPage: DEFAULT_PAGE, isInit: false, banner: null },
-    etc: { list: [], total: 0, page: DEFAULT_PAGE, limit: DEFAULT_LIMIT, totalPage: DEFAULT_PAGE, isInit: false, banner: null },
-    activeGenre: 'all',
+    fantasy: { list: [], total: 0, page: DEFAULT_PAGE, limit: DEFAULT_LIMIT, totalPage: DEFAULT_PAGE, isInit: false, banner: null },
+    blgl: { list: [], total: 0, page: DEFAULT_PAGE, limit: DEFAULT_LIMIT, totalPage: DEFAULT_PAGE, isInit: false, banner: null },
+    adult: { list: [], total: 0, page: DEFAULT_PAGE, limit: DEFAULT_LIMIT, totalPage: DEFAULT_PAGE, isInit: false, banner: null },
+    best: { list: [], total: 0, page: DEFAULT_PAGE, limit: DEFAULT_LIMIT, totalPage: DEFAULT_PAGE, isInit: false, banner: null },
+    activeGenre: 'romance',
     bannerList: null,
     isFetching: false,
 };
