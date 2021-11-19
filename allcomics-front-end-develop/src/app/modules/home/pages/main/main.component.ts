@@ -311,7 +311,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     getPopular() {
-        const params = { page: 0, limit: 6 };
+        const params = { page: 0, limit: 5 };
         this.homeStore$.dispatch(HomeActions.FetchPopulars({ params }));
     }
 
