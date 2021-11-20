@@ -587,7 +587,7 @@ input.input-top {
   .mat-tab-label {
     height: 40px !important;
     padding: 0 !important;
-    min-width: calc(100% / 6) !important;
+    min-width: calc(100% / 7) !important; // tab width
     font-size: 15px;
     opacity: 1 !important;
   }
