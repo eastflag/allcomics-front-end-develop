@@ -12,6 +12,7 @@ export interface State {
     bottomAdsBanner: Banner;
     goodsBanner: Banner;
     // titles
+    weeks: Title[];
     rankings: Title[];
     populars: Title[];
     recentlyUpdated: Title[];
@@ -28,6 +29,7 @@ export const initialState: State = {
     bottomAdsBanner: null,
     goodsBanner: null,
     // titles
+    weeks: null,
     rankings: null,
     populars: null,
     recentlyUpdated: null,
@@ -58,6 +60,10 @@ export const _homeReducer = createReducer(
         goodsBanner,
     })),
     // titles
+    on(HomeActions.SetWeeks, (state, { weeks }) => ({
+        ...state,
+        weeks,
+    })),
     on(HomeActions.SetRankings, (state, { rankings }) => ({
         ...state,
         rankings,
@@ -98,6 +104,7 @@ export const getSlideBanner = createSelector(selectHome, (state: State) => state
 export const getBottomAdsBanner = createSelector(selectHome, (state: State) => state.bottomAdsBanner);
 export const getGoodsBanner = createSelector(selectHome, (state: State) => state.goodsBanner);
 // titles
+export const getWeeks = createSelector(selectHome, (state: State) => state.weeks);
 export const getRankings = createSelector(selectHome, (state: State) => state.rankings);
 export const getPopulars = createSelector(selectHome, (state: State) => state.populars);
 export const getRecentlyUpdated = createSelector(selectHome, (state: State) => state.recentlyUpdated);

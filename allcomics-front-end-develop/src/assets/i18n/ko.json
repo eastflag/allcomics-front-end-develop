@@ -12,6 +12,16 @@
             "adult": "성인",
             "best": "베스트도전"
         },
+        "week": {
+            "monday": "월",
+            "tuesday": "화",
+            "wednesday": "수",
+            "thursday": "목",
+            "friday": "금",
+            "saturday": "토",
+            "sunday": "일",
+            "complete": "완결"
+        },
         "no-episodes": "{{no}}화",
         "all-age": "전체 이용가",
         "age-over": "{{age}}세 이용가",
@@ -60,6 +70,9 @@
         "title_webnovel": "웹소설"
     },
     "main": {
+        "week": {
+            "header": "요일별 웹툰"
+        },
         "ranking": {
             "header": "실시간 인기 순위",
             "description": "지금 당장 안 보면 후회할걸?"

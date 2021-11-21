@@ -30,6 +30,18 @@ const CURRENCY_RATIO = {
 export class ComicService extends BaseService {
 
     /* ----- MAIN -----*/
+    getWeeks(params: { page?: number, limit?: number }): Observable<Title[]> {
+        params = Object.assign({ page: 0, limit: 0 }, params);
+
+        return this.isAuthenticated$().pipe(
+            switchMap(isAuth => {
+                const path = isAuth ? `/showcases/popular` : `/public/showcases/popular`;
+                return this.request$('GET', environment.apiUrl, path, { ...params });
+            }),
+            map(res => res.list.map((comic: Title) => comic)),
+        );
+    }
+
     getRankings(params: { page?: number, limit?: number }): Observable<Title[]> {
         params = Object.assign({ page: 0, limit: 0 }, params);
 
