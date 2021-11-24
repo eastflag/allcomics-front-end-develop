@@ -43,6 +43,16 @@ export const SetGoodsBanner = createAction(
 );
 
 // Titles
+export const FetchWeeks = createAction(
+    '[HOME] Fetch Weeks',
+    props<{ params: { page: number, limit: number } }>()
+);
+
+export const SetWeeks = createAction(
+    '[HOME] Set Weeks',
+    props<{ weeks: Title[] }>()
+);
+
 export const FetchRankings = createAction(
     '[HOME] Fetch Rankings',
     props<{ params: { page: number, limit: number } }>()

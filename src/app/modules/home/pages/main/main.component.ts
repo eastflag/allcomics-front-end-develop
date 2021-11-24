@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import {Component, OnInit, AfterViewInit, OnDestroy, ViewChild} from '@angular/core';
 import { SwiperConfigInterface } from 'ngx-swiper-wrapper';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -25,6 +25,7 @@ import * as RootActions from '../../../../store/root/root.actions';
 import * as fromHome from '../../store/home.reducer';
 import * as HomeActions from '../../store/home.actions';
 import { Banner } from '@app/models/banner';
+import {MatTabGroup} from '@angular/material';
 
 export interface UserInfo {
     profile: any;
@@ -46,6 +47,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     public templateInfo: TemplateInfo;
     public isToggle: boolean;
 
+    weeks$: Observable<Title[]>;
     ranking$: Observable<Title[]>;
     populars$: Observable<Title[]>;
     recentlyUpdated$: Observable<Title[]>;
@@ -107,6 +109,16 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     ];
 
+    // week comic
+    // tab Info
+    public tabs: { week: string, name: string }[];
+    public readonly weeks = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'complete'];
+    public selectedIndex = 0;
+    public idx = 0;
+    @ViewChild('tabGroup', { static: true }) tabGroup: MatTabGroup;
+    private swipeCoord?: [number, number];
+    private swipeTime?: number;
+
     constructor(private eventService: EventService,
                 private comicService: ComicService,
                 private authService: LemonAuthService,
@@ -125,6 +137,8 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
         this.setupProfileListener();
         this.setupBannerListener();
         this.setupTitleListener();
+
+        this.initTabsInfo();
     }
 
     ngOnDestroy() {
@@ -135,6 +149,44 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
 
     ngAfterViewInit() {
         this.setSwiperConfig();
+    }
+
+    private initTabsInfo() {
+        this.tabs = this.weeks.map(week => ({ week, name: `common.week.${week}` }));
+    }
+
+    swipe(e: any, when: any): void {
+        const coord: [any, any] = [e.changedTouches[0].clientX, e.changedTouches[0].clientY];
+        const time = new Date().getTime();
+
+        if (when === 'start') {
+            this.swipeCoord = coord;
+            this.swipeTime = time;
+        } else if (when === 'end') {
+            const direction = [coord[0] - this.swipeCoord[0], coord[1] - this.swipeCoord[1]];
+            const duration = time - this.swipeTime;
+
+            if (duration < 1000 //
+                && Math.abs(direction[0]) > 30 // Long enough
+                && Math.abs(direction[0]) > Math.abs(direction[1] * 3)) { // Horizontal enough
+                const swipe = direction[0] < 0 ? 'next' : 'previous';
+                switch (swipe) {
+                    case 'previous':
+                        if (this.selectedIndex > 0) { this.selectedIndex--; }
+                        break;
+                    case 'next':
+                        if (this.selectedIndex < this.tabGroup._tabs.length - 1) { this.selectedIndex++; }
+                        break;
+                }
+            }
+        }
+    }
+
+    changeTab(tabInfo: any) {
+        const { index } = tabInfo;
+        const activeTab = this.tabs[index];
+        const { week } = activeTab;
+        // this.webtoonStore$.dispatch(WebtoonActions.SetActiveGenre({ genre }));
     }
 
     scroll(event: any) {
@@ -148,12 +200,16 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     private setupTitleListener() {
+        this.weeks$ = this.homeStore$.pipe(select(fromHome.getWeeks), filter(title => !!title), takeUntil(this.destroyed$));
         this.ranking$ = this.homeStore$.pipe(select(fromHome.getRankings), filter(title => !!title), takeUntil(this.destroyed$));
         this.populars$ = this.homeStore$.pipe(select(fromHome.getPopulars), filter(title => !!title), takeUntil(this.destroyed$));
         this.recentlyUpdated$ = this.homeStore$.pipe(select(fromHome.getRecentlyUpdated), filter(title => !!title), takeUntil(this.destroyed$));
         this.romance$ = this.homeStore$.pipe(select(fromHome.getRomance), filter(title => !!title), takeUntil(this.destroyed$));
         this.boysLove$ = this.homeStore$.pipe(select(fromHome.getBoysLove), filter(title => !!title), takeUntil(this.destroyed$));
         this.completed$ = this.homeStore$.pipe(select(fromHome.getCompleted), filter(title => !!title), takeUntil(this.destroyed$));
+
+        const shouldFetchWeeks$ = this.homeStore$.pipe(select(fromHome.getWeeks), filter(title => !!!title), take(1), takeUntil(this.destroyed$));
+        shouldFetchWeeks$.subscribe(() => this.getWeeks());
 
         const shouldFetchRankings$ = this.homeStore$.pipe(select(fromHome.getRankings), filter(title => !!!title), take(1), takeUntil(this.destroyed$));
         shouldFetchRankings$.subscribe(() => this.getRankings());
@@ -305,13 +361,18 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
         this.eventService.emit('toggleSidebar', true);
     }
 
+    getWeeks() {
+        const params = { page: 0, limit: 5 };
+        this.homeStore$.dispatch(HomeActions.FetchWeeks({ params }));
+    }
+
     getRankings() {
         const params = { page: 0, limit: 4 };
         this.homeStore$.dispatch(HomeActions.FetchRankings({ params }));
     }
 
     getPopular() {
-        const params = { page: 0, limit: 6 };
+        const params = { page: 0, limit: 5 };
         this.homeStore$.dispatch(HomeActions.FetchPopulars({ params }));
     }
 

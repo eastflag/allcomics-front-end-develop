@@ -132,6 +132,15 @@ $main-light-color: #9EDEDD;
     @extend .top-title;
     color: white;
   }
+
+  .title-text {
+    font-size: 20px;
+    cursor: pointer;
+    &.active {
+      color: #0ebebb;
+      font-weight: bold;
+    }
+  }
 }
 
 .top-logo {
@@ -567,6 +576,25 @@ input.input-top {
   }
 }
 
+#week-comics {
+  .mat-ink-bar{
+    background-color: #46C1BE !important;
+  }
+  p.ng-star-inserted{
+    font-weight: bold !important;
+  }
+  .mat-tab-label {
+    height: 40px !important;
+    padding: 0 !important;
+    min-width: calc(100% / 8) !important; // tab width
+    font-size: 15px;
+    opacity: 1 !important;
+  }
+  .mat-tab-label-active {
+    color: #46C1BE;
+  }
+}
+
 /** Webtoon **/
 #wrapper-webtoon{
   .mat-ink-bar{
@@ -578,7 +606,7 @@ input.input-top {
   .mat-tab-label {
     height: 40px !important;
     padding: 0 !important;
-    min-width: calc(100% / 6) !important;
+    min-width: calc(100% / 7) !important; // tab width
     font-size: 15px;
     opacity: 1 !important;
   }

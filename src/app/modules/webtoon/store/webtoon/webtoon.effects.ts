@@ -46,7 +46,7 @@ export class WebtoonEffects {
             exhaustMap(([action, originWebtoon]) => {
                 const { params } = action;
                 const { genre, webtoon } = originWebtoon;
-                const detectedGenre = genre == 'all' ? '' : genre;
+                const detectedGenre = genre === 'romance' ? '' : genre;
                 const { list: storedList } = webtoon; // stored webtoon data
                 return this.comicService.getGenreTitles({ ...params, genre: detectedGenre }).pipe(
                     map(({ list: nextList, total, page, limit }) => {

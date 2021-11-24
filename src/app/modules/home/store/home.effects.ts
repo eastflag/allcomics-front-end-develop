@@ -74,6 +74,19 @@ export class HomeEffects {
     );
 
     // titles
+    FetchWeeks$ = createEffect(
+        () => this.actions$.pipe(
+            ofType(HomeActions.FetchWeeks),
+            exhaustMap(action => {
+                const { params } = action;
+                return this.comicsApiService.getWeeks(params).pipe(
+                    map(weeks => HomeActions.SetWeeks({ weeks })),
+                    catchError(error => of(HomeActions.RequestFailure({ error })))
+                );
+            })
+        )
+    );
+
     fetchRankings$ = createEffect(
         () => this.actions$.pipe(
             ofType(HomeActions.FetchRankings),
