@@ -15,17 +15,13 @@ export type SubCategory = 'event-main' | 'event-info' | 'event-free' // event
     | 'romance' | 'drama' | 'sports' | 'action' | 'etc'; // genre
 
 export interface BannerItem {
-    imageUrl: string;
-    link: string;
-    slideSpeed?: number;
-    order?: number;
+    img_url: string;
+    redirect_url: string;
+    // slideSpeed: number;
 }
 
 export interface Banner {
-    id: string;
-    createdAt: Date;
-    category: Category;
-    subCategory: SubCategory;
-    items: BannerItem[];
-    updatedAt?: Date;
+    // id: string;
+    count: string;
+    list: BannerItem[];
 }

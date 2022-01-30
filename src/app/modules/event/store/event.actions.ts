@@ -45,7 +45,7 @@ export const SetEventFreeBanner = createAction(
 // Titles
 export const FetchRankings = createAction(
     '[EVENT] Fetch Rankings',
-    props<{ params: { page: number, limit: number } }>()
+    props<{ params: { keyword: string } }>()
 );
 
 export const SetRankings = createAction(
@@ -55,7 +55,7 @@ export const SetRankings = createAction(
 
 export const FetchPopulars = createAction(
     '[EVENT] Fetch Populars',
-    props<{ params: { page: number, limit: number } }>()
+    props<{ params: { keyword: string } }>()
 );
 
 export const SetPopulars = createAction(
@@ -65,7 +65,7 @@ export const SetPopulars = createAction(
 
 export const FetchCompleted = createAction(
     '[EVENT] Fetch Completed',
-    props<{ params: { page: number, limit: number } }>()
+    props<{ params: { keyword: string } }>()
 );
 
 export const SetCompleted = createAction(

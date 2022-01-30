@@ -1,15 +1,15 @@
 import { createAction, props } from '@ngrx/store';
-import { Banner } from '@app/models/banner';
+import {Banner, BannerItem} from '@app/models/banner';
 import { Title } from '@app/models/title';
 
 export const FetchBannerList = createAction(
     '[HOME] Fetch Banner List',
-    props<{ params: any, category: string }>()
+    props<{ params: any }>()
 );
 
 export const SetBannerList = createAction(
     '[HOME] Set Banner List',
-    props<{ total: number, list: Banner[] }>()
+    props<{ count: string, list: BannerItem[] }>()
 );
 
 export const FetchSlideBanner = createAction(
@@ -55,7 +55,7 @@ export const SetWeeks = createAction(
 
 export const FetchRankings = createAction(
     '[HOME] Fetch Rankings',
-    props<{ params: { page: number, limit: number } }>()
+    props<{ params: { keyword: string } }>()
 );
 
 export const SetRankings = createAction(
@@ -65,7 +65,7 @@ export const SetRankings = createAction(
 
 export const FetchPopulars = createAction(
     '[HOME] Fetch Populars',
-    props<{ params: { page: number, limit: number } }>()
+    props<{ params: { keyword: string } }>()
 );
 
 export const SetPopulars = createAction(
@@ -75,7 +75,7 @@ export const SetPopulars = createAction(
 
 export const FetchRecentlyUpdated = createAction(
     '[HOME] Fetch Recently Updated',
-    props<{ params: { page: number, limit: number } }>()
+    props<{ params: { keyword: string } }>()
 );
 
 export const SetRecentlyUpdated = createAction(
@@ -85,7 +85,7 @@ export const SetRecentlyUpdated = createAction(
 
 export const FetchRomance = createAction(
     '[HOME] Fetch Romance',
-    props<{ params: { page: number, limit: number } }>()
+    props<{ params: { keyword: string } }>()
 );
 
 export const SetRomance = createAction(
@@ -105,7 +105,7 @@ export const SetBoysLove = createAction(
 
 export const FetchCompleted = createAction(
     '[HOME] Fetch Completed',
-    props<{ params: { page: number, limit: number } }>()
+    props<{ params: { keyword: string } }>()
 );
 
 export const SetCompleted = createAction(

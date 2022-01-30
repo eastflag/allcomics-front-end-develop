@@ -136,7 +136,7 @@ export class RootEffects {
         )
     );
 
-    getProfile$ = createEffect(
+/*    getProfile$ = createEffect(
         () => this.actions$.pipe(
             ofType(RootActions.GetProfile),
             switchMap(() => this.lemonAuthService.isAuthenticated$()),
@@ -153,7 +153,7 @@ export class RootEffects {
                 );
             }),
         )
-    );
+    );*/
 
     logout$ = createEffect(
         () => this.actions$.pipe(

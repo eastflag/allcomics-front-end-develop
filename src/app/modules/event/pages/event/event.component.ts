@@ -109,7 +109,7 @@ export class EventComponent implements OnInit, OnDestroy {
     }
 
     private setupBannerListener() {
-        this.bannerList$ = this.eventStore$.pipe(select(fromEvent.getEventBanners), filter(banners => !!banners), takeUntil(this.destroyed$));
+        /*this.bannerList$ = this.eventStore$.pipe(select(fromEvent.getEventBanners), filter(banners => !!banners), takeUntil(this.destroyed$));
         this.eventMainBanner$ = this.eventStore$.pipe(select(fromEvent.getEventMainBanner), filter(banner => !!banner), takeUntil(this.destroyed$));
         this.eventInfoBanner$ = this.eventStore$.pipe(select(fromEvent.getEventInfoBanner), filter(banner => !!banner), takeUntil(this.destroyed$));
         this.eventFreeBanner$ = this.eventStore$.pipe(select(fromEvent.getEventFreeBanner), filter(banner => !!banner), takeUntil(this.destroyed$));
@@ -122,10 +122,10 @@ export class EventComponent implements OnInit, OnDestroy {
         });
 
         const shouldFetchEventMainBanner$ = this.bannerList$.pipe(
-            map(banners => banners.filter(banner => banner.category === 'event' && banner.subCategory === 'event-main')),
+            // map(banners => banners.filter(banner => banner.category === 'event' && banner.subCategory === 'event-main')),
             filter(banners => !!banners),
             filter(banners => banners.length > 0),
-            map(banners => banners[0].id), // get slideBannerId
+            // map(banners => banners[0].id), // get slideBannerId
             withLatestFrom(this.eventStore$.pipe(select(fromEvent.getEventMainBanner))),
             filter(([bannerId, banner]) => !!!banner),
             map(([bannerId, banner]) => bannerId),
@@ -134,10 +134,10 @@ export class EventComponent implements OnInit, OnDestroy {
         shouldFetchEventMainBanner$.subscribe(eventMainBannerId => this.eventStore$.dispatch(EventActions.FetchEventMainBanner({ eventMainBannerId })));
 
         const shouldFetchEventInfoBanner$ = this.bannerList$.pipe(
-            map(banners => banners.filter(banner => banner.category === 'event' && banner.subCategory === 'event-info')),
+            // map(banners => banners.filter(banner => banner.category === 'event' && banner.subCategory === 'event-info')),
             filter(banners => !!banners),
             filter(banners => banners.length > 0),
-            map(banners => banners[0].id),
+            // map(banners => banners[0].id),
             withLatestFrom(this.eventStore$.pipe(select(fromEvent.getEventInfoBanner))),
             filter(([bannerId, banner]) => !!!banner),
             map(([bannerId, banner]) => bannerId),
@@ -146,7 +146,7 @@ export class EventComponent implements OnInit, OnDestroy {
         shouldFetchEventInfoBanner$.subscribe(eventInfoBannerId => this.eventStore$.dispatch(EventActions.FetchEventInfoBanner({ eventInfoBannerId })));
 
         const shouldFetchEventFreeBanner$ = this.bannerList$.pipe(
-            map(banners => banners.filter(banner => banner.category === 'event' && banner.subCategory === 'event-free')),
+            // map(banners => banners.filter(banner => banner.category === 'event' && banner.subCategory === 'event-free')),
             filter(banners => !!banners),
             filter(banners => banners.length > 0),
             map(banners => banners[0].id),
@@ -155,7 +155,7 @@ export class EventComponent implements OnInit, OnDestroy {
             map(([bannerId, banner]) => bannerId),
             takeUntil(this.destroyed$)
         );
-        shouldFetchEventFreeBanner$.subscribe(eventFreeBannerId => this.eventStore$.dispatch(EventActions.FetchEventFreeBanner({ eventFreeBannerId })));
+        shouldFetchEventFreeBanner$.subscribe(eventFreeBannerId => this.eventStore$.dispatch(EventActions.FetchEventFreeBanner({ eventFreeBannerId })));*/
     }
 
     private setupTemplateInfo() {
@@ -166,17 +166,17 @@ export class EventComponent implements OnInit, OnDestroy {
     }
 
     getRankings() {
-        const params = { page: 0, limit: 4 };
+        const params = { keyword: 'rank' };
         this.eventStore$.dispatch(EventActions.FetchRankings({ params }));
     }
 
     getPopular() {
-        const params = { page: 0, limit: 6 };
+        const params = { keyword: 'rec' };
         this.eventStore$.dispatch(EventActions.FetchPopulars({ params }));
     }
 
     getCompleted() {
-        const params = { page: 0, limit: 4 };
+        const params = { keyword: 'tofree' };
         this.eventStore$.dispatch(EventActions.FetchCompleted({ params }));
     }
 
@@ -186,26 +186,26 @@ export class EventComponent implements OnInit, OnDestroy {
 
     clickEventMainBanner() {
         const bannerLink = this.eventMainBanner$.pipe(
-            map(banner => banner.items[0].link),
+            // map(banner => banner.items[0].redirect_url),
             takeUntil(this.destroyed$)
         );
-        bannerLink.subscribe(link => this.route.navigateByUrl(link));
+        // bannerLink.subscribe(link => this.route.navigateByUrl(link));
     }
 
     clickEventInfoBanner() {
         const bannerLink = this.eventInfoBanner$.pipe(
-            map(banner => banner.items[0].link),
+            // map(banner => banner.items[0].redirect_url),
             takeUntil(this.destroyed$)
         );
-        bannerLink.subscribe(link => this.route.navigateByUrl(link));
+        // bannerLink.subscribe(link => this.route.navigateByUrl(link));
     }
 
     clickEventFreeBanner() {
         const bannerLink = this.eventFreeBanner$.pipe(
-            map(banner => banner.items[0].link),
+            // map(banner => banner.items[0].redirect_url),
             takeUntil(this.destroyed$)
         );
-        bannerLink.subscribe(link => this.route.navigateByUrl(link));
+        // bannerLink.subscribe(link => this.route.navigateByUrl(link));
     }
 
 

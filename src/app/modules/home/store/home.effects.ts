@@ -11,7 +11,7 @@ import * as HomeActions from './home.actions';
 
 import { ComicService } from '@core/services/comic.service';
 import { LoaderService } from '@core/services/loader.service';
-import { BannerInfo } from '@app/models/banner';
+import {Banner, BannerInfo} from '@app/models/banner';
 
 @Injectable()
 export class HomeEffects {
@@ -25,9 +25,10 @@ export class HomeEffects {
         () => this.actions$.pipe(
             ofType(HomeActions.FetchBannerList),
             exhaustMap(action => {
-                const { category, params } = action;
-                return this.comicsApiService.getBanners({ ...params, category }).pipe(
-                    map(({ total, list }) => HomeActions.SetBannerList({ total, list })),
+                console.log(action);
+                const { params } = action;
+                return this.comicsApiService.getBanners({ ...params }).pipe(
+                    map((banner: Banner) => HomeActions.SetSlideBanner({slideBanner: banner})),
                     catchError(error => of(HomeActions.RequestFailure({ error })))
                 );
             })
@@ -100,6 +101,19 @@ export class HomeEffects {
         )
     );
 
+    fetchCompleted$ = createEffect(
+        () => this.actions$.pipe(
+            ofType(HomeActions.FetchCompleted),
+            exhaustMap(action => {
+                const { params } = action;
+                return this.comicsApiService.getCompleted(params).pipe(
+                    map(completed => HomeActions.SetCompleted({ completed })),
+                    catchError(error => of(HomeActions.RequestFailure({ error })))
+                );
+            })
+        )
+    );
+
     fetchPopulars$ = createEffect(
         () => this.actions$.pipe(
             ofType(HomeActions.FetchPopulars),
@@ -152,18 +166,7 @@ export class HomeEffects {
         )
     );
 
-    fetchCompleted$ = createEffect(
-        () => this.actions$.pipe(
-            ofType(HomeActions.FetchCompleted),
-            exhaustMap(action => {
-                const { params } = action;
-                return this.comicsApiService.getCompleted(params).pipe(
-                    map(completed => HomeActions.SetCompleted({ completed })),
-                    catchError(error => of(HomeActions.RequestFailure({ error })))
-                );
-            })
-        )
-    );
+
 
     requestFailure$ = createEffect(
         () => this.actions$.pipe(

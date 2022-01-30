@@ -134,11 +134,11 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     ngOnInit() {
         window.addEventListener('scroll', this.scroll, true);
         this.setupTemplateInfo();
-        this.setupProfileListener();
+        // this.setupProfileListener();
         this.setupBannerListener();
         this.setupTitleListener();
-
-        this.initTabsInfo();
+        //
+        // this.initTabsInfo();
     }
 
     ngOnDestroy() {
@@ -200,19 +200,23 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     private setupTitleListener() {
-        this.weeks$ = this.homeStore$.pipe(select(fromHome.getWeeks), filter(title => !!title), takeUntil(this.destroyed$));
+        // this.weeks$ = this.homeStore$.pipe(select(fromHome.getWeeks), filter(title => !!title), takeUntil(this.destroyed$));
         this.ranking$ = this.homeStore$.pipe(select(fromHome.getRankings), filter(title => !!title), takeUntil(this.destroyed$));
+        this.completed$ = this.homeStore$.pipe(select(fromHome.getCompleted), filter(title => !!title), takeUntil(this.destroyed$));
         this.populars$ = this.homeStore$.pipe(select(fromHome.getPopulars), filter(title => !!title), takeUntil(this.destroyed$));
         this.recentlyUpdated$ = this.homeStore$.pipe(select(fromHome.getRecentlyUpdated), filter(title => !!title), takeUntil(this.destroyed$));
         this.romance$ = this.homeStore$.pipe(select(fromHome.getRomance), filter(title => !!title), takeUntil(this.destroyed$));
-        this.boysLove$ = this.homeStore$.pipe(select(fromHome.getBoysLove), filter(title => !!title), takeUntil(this.destroyed$));
-        this.completed$ = this.homeStore$.pipe(select(fromHome.getCompleted), filter(title => !!title), takeUntil(this.destroyed$));
+        // this.boysLove$ = this.homeStore$.pipe(select(fromHome.getBoysLove), filter(title => !!title), takeUntil(this.destroyed$));
 
-        const shouldFetchWeeks$ = this.homeStore$.pipe(select(fromHome.getWeeks), filter(title => !!!title), take(1), takeUntil(this.destroyed$));
-        shouldFetchWeeks$.subscribe(() => this.getWeeks());
+
+        // const shouldFetchWeeks$ = this.homeStore$.pipe(select(fromHome.getWeeks), filter(title => !!!title), take(1), takeUntil(this.destroyed$));
+        // shouldFetchWeeks$.subscribe(() => this.getWeeks());
 
         const shouldFetchRankings$ = this.homeStore$.pipe(select(fromHome.getRankings), filter(title => !!!title), take(1), takeUntil(this.destroyed$));
         shouldFetchRankings$.subscribe(() => this.getRankings());
+
+        const shouldFetchCompleted$ = this.homeStore$.pipe(select(fromHome.getCompleted), filter(title => !!!title), take(1), takeUntil(this.destroyed$));
+        shouldFetchCompleted$.subscribe(() => this.getCompleted());
 
         const shouldFetchPopulars$ = this.homeStore$.pipe(select(fromHome.getPopulars), filter(title => !!!title), take(1), takeUntil(this.destroyed$));
         shouldFetchPopulars$.subscribe(() => this.getPopular());
@@ -222,25 +226,22 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
 
         const shouldFetchRomance$ = this.homeStore$.pipe(select(fromHome.getRomance), filter(title => !!!title), take(1), takeUntil(this.destroyed$));
         shouldFetchRomance$.subscribe(() => this.getRomance());
+        //
+        // const shouldFetchBoysLove$ = this.homeStore$.pipe(select(fromHome.getBoysLove), filter(title => !!!title), take(1), takeUntil(this.destroyed$));
+        // shouldFetchBoysLove$.subscribe(() => this.getBoysLove());
+        //
 
-        const shouldFetchBoysLove$ = this.homeStore$.pipe(select(fromHome.getBoysLove), filter(title => !!!title), take(1), takeUntil(this.destroyed$));
-        shouldFetchBoysLove$.subscribe(() => this.getBoysLove());
-
-        const shouldFetchCompleted$ = this.homeStore$.pipe(select(fromHome.getCompleted), filter(title => !!!title), take(1), takeUntil(this.destroyed$));
-        shouldFetchCompleted$.subscribe(() => this.getCompleted());
     }
 
     private setupBannerListener() {
-        this.bannerList$ = this.homeStore$.pipe(select(fromHome.getBanners), filter(banners => !!banners), takeUntil(this.destroyed$));
-        this.bottomAdsBanner$ = this.homeStore$.pipe(select(fromHome.getBottomAdsBanner), filter(banner => !!banner), takeUntil(this.destroyed$));
-        this.goodsBanner$ = this.homeStore$.pipe(select(fromHome.getGoodsBanner), filter(banner => !!banner), takeUntil(this.destroyed$));
         this.slideBanner$ = this.homeStore$.pipe(select(fromHome.getSlideBanner), filter(banner => !!banner), takeUntil(this.destroyed$));
-        this.myPageBanner$ = this.rootStore$.pipe(select(fromRoot.getMyPageBanner), filter(banner => !!banner), takeUntil(this.destroyed$));
 
         this.slideBanner$.subscribe(banner => {
-            if (banner.hasOwnProperty('items')) {
-                const { items } = banner;
-                const slideSpeed = items[0].slideSpeed;
+            console.log(';;;;;', banner);
+            if (banner.hasOwnProperty('list')) {
+                const { list } = banner;
+                // const slideSpeed = items[0].slideSpeed;
+                const slideSpeed = 3000;
                 this.config = {
                     a11y: true,
                     direction: 'horizontal',
@@ -260,58 +261,12 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
 
         const shouldFetchBannerList$ = this.homeStore$.pipe(select(fromHome.getBanners), filter(banners => !!!banners), take(1), takeUntil(this.destroyed$));
         shouldFetchBannerList$.subscribe(() => {
-            const params = {};
-            const category = 'main';
-            this.homeStore$.dispatch(HomeActions.FetchBannerList({ params, category }));
+            console.log('shouldFetchBannerList$');
+            const params = {
+                count: '5'
+            };
+            this.homeStore$.dispatch(HomeActions.FetchBannerList({ params }));
         });
-
-        const shouldFetchSlideBanner$ = this.bannerList$.pipe(
-            map(banners => banners.filter(banner => banner.category === 'main' && banner.subCategory === 'slide')),
-            filter(banners => !!banners),
-            filter(banners => banners.length > 0),
-            map(banners => banners[0].id), // get slideBannerId
-            withLatestFrom(this.homeStore$.pipe(select(fromHome.getSlideBanner))),
-            filter(([bannerId, banner]) => !!!banner),
-            map(([bannerId, banner]) => bannerId),
-            takeUntil(this.destroyed$)
-        );
-        shouldFetchSlideBanner$.subscribe(slideBannerId => this.homeStore$.dispatch(HomeActions.FetchSlideBanner({ slideBannerId })));
-
-        const shouldFetchBottomAdsBanner$ = this.bannerList$.pipe(
-            map(banners => banners.filter(banner => banner.category === 'main' && banner.subCategory === 'bottom-ads')),
-            filter(banners => !!banners),
-            filter(banners => banners.length > 0),
-            map(banners => banners[0].id),
-            withLatestFrom(this.homeStore$.pipe(select(fromHome.getBottomAdsBanner))),
-            filter(([bannerId, banner]) => !!!banner),
-            map(([bannerId, banner]) => bannerId),
-            takeUntil(this.destroyed$)
-        );
-        shouldFetchBottomAdsBanner$.subscribe(bottomAdsBannerId => this.homeStore$.dispatch(HomeActions.FetchBottomAdsBanner({ bottomAdsBannerId })));
-
-        const shoudFetchGoodsBanner$ = this.bannerList$.pipe(
-            map(banners => banners.filter(banner => banner.category === 'main' && banner.subCategory === 'goods')),
-            filter(banners => !!banners),
-            filter(banners => banners.length > 0),
-            map(banners => banners[0].id),
-            withLatestFrom(this.homeStore$.pipe(select(fromHome.getGoodsBanner))),
-            filter(([bannerId, banner]) => !!!banner),
-            map(([bannerId, banner]) => bannerId),
-            takeUntil(this.destroyed$)
-        );
-        shoudFetchGoodsBanner$.subscribe(goodsBannerId => this.homeStore$.dispatch(HomeActions.FetchGoodsBanner({ goodsBannerId })));
-
-        const shoudFetchMyPageBanner$ = this.bannerList$.pipe(
-            map(banners => banners.filter(banner => banner.category === 'main' && banner.subCategory === 'mypage')),
-            filter(banners => !!banners),
-            filter(banners => banners.length > 0),
-            map(banners => banners[0].id),
-            withLatestFrom(this.rootStore$.pipe(select(fromRoot.getMyPageBanner))),
-            filter(([bannerId, banner]) => !!!banner),
-            map(([bannerId, banner]) => bannerId),
-            takeUntil(this.destroyed$)
-        );
-        shoudFetchMyPageBanner$.subscribe(myPageBannerId => this.rootStore$.dispatch(RootActions.FetchMyPageBanner({ myPageBannerId })));
     }
 
     private setupProfileListener() {
@@ -367,22 +322,27 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     getRankings() {
-        const params = { page: 0, limit: 4 };
+        const params = { keyword: 'rank' };
         this.homeStore$.dispatch(HomeActions.FetchRankings({ params }));
     }
 
+    getCompleted() {
+        const params = { keyword: 'tofree' };
+        this.homeStore$.dispatch(HomeActions.FetchCompleted({ params }));
+    }
+
     getPopular() {
-        const params = { page: 0, limit: 5 };
+        const params = { keyword: 'rec' };
         this.homeStore$.dispatch(HomeActions.FetchPopulars({ params }));
     }
 
     getRecentlyUpdated() {
-        const params = { page: 0, limit: 6 };
+        const params = {  keyword: 'new' };
         this.homeStore$.dispatch(HomeActions.FetchRecentlyUpdated({ params }));
     }
 
     getRomance() {
-        const params = { page: 0, limit: 4 };
+        const params = { keyword: 'challenges' };
         this.homeStore$.dispatch(HomeActions.FetchRomance({ params }));
     }
 
@@ -391,10 +351,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
         this.homeStore$.dispatch(HomeActions.FetchBoysLove({ params }));
     }
 
-    getCompleted() {
-        const params = { page: 0, limit: 4 };
-        this.homeStore$.dispatch(HomeActions.FetchCompleted({ params }));
-    }
+
 
     postDeviceInfo(user: UserInfo) {
         const deviceInfo$ = this.rootStore$.pipe(

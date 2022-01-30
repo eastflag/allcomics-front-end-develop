@@ -82,7 +82,7 @@ export class MainTemplateComponent implements OnInit, OnDestroy {
 
     clickBanner() {
         const bannerLink = this.myPageBanner$.pipe(
-            map(banner => banner.items[0].link),
+            map(banner => banner.list[0].redirect_url),
             takeUntil(this.destroyed$)
         );
         bannerLink.subscribe(link => this.route(link));

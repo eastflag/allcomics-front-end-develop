@@ -1,26 +1,21 @@
 export interface Title {
     id?: string;
     image?: string;
-    thumbnails?: {
+    episodeCount?: number;
+    validEpisodeCount: number;
+    thumbnail?: {
         sq: string;
         vs: string;
         hs: string;
         hl: string;
     };
     description?: string;
-    isNew?: boolean;
-    genres?: string[];
-    isRecommended?: boolean;
+    genre?: string[];
     name?: string;
-    isCompleted?: boolean;
-    isInSale?: boolean;
-    isValid?: boolean;
-    isFavorite?: boolean;
-    createdAt?: Date;
-    updatedAt?: Date;
-    deletedAt?: Date;
-    titleId?: string;
+    day?: string;
     age?: number;
-    episodeCount?: number;
-    validEpisodeCount: number;
+    updateDate?: Date;  // timestamp
+    postDay?: number;
+    stars?: string;
+    language?: string;
 }

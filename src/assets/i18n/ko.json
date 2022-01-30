@@ -74,21 +74,21 @@
             "header": "요일별 웹툰"
         },
         "ranking": {
-            "header": "실시간 인기 순위",
+            "header": "실시간 랭킹",
             "description": "지금 당장 안 보면 후회할걸?"
         },
         "popular": {
             "header": "인기 추천 작품"
         },
         "new-update": {
-            "header": "신규 업데이트"
+            "header": "오늘의 신작"
         },
         "idol-goods": {
             "header": "아이돌 상품",
             "description": "구매 가능한 아이돌 굿즈!"
         },
         "hot-romance": {
-            "header": "화제의 로맨스 웹툰",
+            "header": "도전! 밀리언 웹툰",
             "description": "연애하고 싶어지는 달콤한 이야기"
         },
         "hot-bl-picks": {

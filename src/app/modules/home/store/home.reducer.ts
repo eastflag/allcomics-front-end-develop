@@ -1,16 +1,16 @@
 import { createReducer, on, Action, createFeatureSelector, createSelector } from '@ngrx/store';
 import * as HomeActions from './home.actions';
 
-import { Banner } from '@app/models/banner';
+import {Banner, BannerItem} from '@app/models/banner';
 import { Title } from '@app/models/title';
 
 export interface State {
     // banners
-    bannersTotal: number;
-    banners: Banner[];
+    bannerCount: string;
+    banners: BannerItem[];
     slideBanner: Banner;
-    bottomAdsBanner: Banner;
-    goodsBanner: Banner;
+    // bottomAdsBanner: Banner;
+    // goodsBanner: Banner;
     // titles
     weeks: Title[];
     rankings: Title[];
@@ -23,11 +23,11 @@ export interface State {
 
 export const initialState: State = {
     // banners
-    bannersTotal: null,
+    bannerCount: null,
     banners: null,
     slideBanner: null,
-    bottomAdsBanner: null,
-    goodsBanner: null,
+    // bottomAdsBanner: null,
+    // goodsBanner: null,
     // titles
     weeks: null,
     rankings: null,
@@ -42,9 +42,9 @@ export const _homeReducer = createReducer(
     initialState,
 
     // banners
-    on(HomeActions.SetBannerList, (state, { total, list }) => ({
+    on(HomeActions.SetBannerList, (state, { count, list }) => ({
         ...state,
-        bannersTotal: total,
+        bannerCount: count,
         banners: list,
     })),
     on(HomeActions.SetSlideBanner, (state, { slideBanner }) => ({
@@ -101,8 +101,8 @@ const selectHome = createFeatureSelector<State>('home');
 // banners
 export const getBanners = createSelector(selectHome, (state: State) => state.banners);
 export const getSlideBanner = createSelector(selectHome, (state: State) => state.slideBanner);
-export const getBottomAdsBanner = createSelector(selectHome, (state: State) => state.bottomAdsBanner);
-export const getGoodsBanner = createSelector(selectHome, (state: State) => state.goodsBanner);
+// export const getBottomAdsBanner = createSelector(selectHome, (state: State) => state.bottomAdsBanner);
+// export const getGoodsBanner = createSelector(selectHome, (state: State) => state.goodsBanner);
 // titles
 export const getWeeks = createSelector(selectHome, (state: State) => state.weeks);
 export const getRankings = createSelector(selectHome, (state: State) => state.rankings);

@@ -42,48 +42,50 @@ export class ComicService extends BaseService {
         );
     }
 
-    getRankings(params: { page?: number, limit?: number }): Observable<Title[]> {
-        params = Object.assign({ page: 0, limit: 0 }, params);
-
+    getRankings(params: { keyword?: string }): Observable<Title[]> {
         return this.isAuthenticated$().pipe(
             switchMap(isAuth => {
-                const path = isAuth ? `/showcases/ranking` : `/public/showcases/ranking`;
+                const path = isAuth ? `/public/webtoon-list/search` : `/public/webtoon-list/search`;
                 return this.request$('GET', environment.apiUrl, path, { ...params });
             }),
             map(res => res.list.map((comic: Title) => comic)),
         );
     }
 
-    getPopular(params: { page?: number, limit?: number }): Observable<Title[]> {
-        params = Object.assign({ page: 0, limit: 0 }, params);
-
+    getCompleted(params: { keyword?: string }): Observable<Title[]> {
         return this.isAuthenticated$().pipe(
             switchMap(isAuth => {
-                const path = isAuth ? `/showcases/popular` : `/public/showcases/popular`;
+                const path = isAuth ? `/public/webtoon-list/search` : `/public/webtoon-list/search`;
                 return this.request$('GET', environment.apiUrl, path, { ...params });
             }),
             map(res => res.list.map((comic: Title) => comic)),
         );
     }
 
-    getRecentlyUpdated(params: { page?: number, limit?: number }): Observable<Title[]> {
-        params = Object.assign({ page: 0, limit: 0 }, params);
-
+    getPopular(params: { keyword?: string }): Observable<Title[]> {
         return this.isAuthenticated$().pipe(
             switchMap(isAuth => {
-                const path = isAuth ? `/showcases/recently-updated` : `/public/showcases/recently-updated`;
+                const path = isAuth ? `/public/webtoon-list/search` : `/public/webtoon-list/search`;
                 return this.request$('GET', environment.apiUrl, path, { ...params });
             }),
             map(res => res.list.map((comic: Title) => comic)),
         );
     }
 
-    getRomance(params: { page?: number, limit?: number }): Observable<Title[]> {
-        params = Object.assign({ page: 0, limit: 0 }, params);
-
+    getRecentlyUpdated(params: { keyword?: string }): Observable<Title[]> {
         return this.isAuthenticated$().pipe(
             switchMap(isAuth => {
-                const path = isAuth ? `/showcases/romance` : `/public/showcases/romance`;
+                const path = isAuth ? `/public/webtoon-list/search` : `/public/webtoon-list/search`;
+                return this.request$('GET', environment.apiUrl, path, { ...params });
+            }),
+            map(res => res.list.map((comic: Title) => comic)),
+        );
+    }
+
+    getRomance(params: { keyword?: string }): Observable<Title[]> {
+        return this.isAuthenticated$().pipe(
+            switchMap(isAuth => {
+                const path = isAuth ? `/public/webtoon-list/search` : `/public/webtoon-list/search`;
                 return this.request$('GET', environment.apiUrl, path, { ...params });
             }),
             map(res => res.list.map((comic: Title) => comic)),
@@ -102,17 +104,6 @@ export class ComicService extends BaseService {
         );
     }
 
-    getCompleted(params: { page?: number, limit?: number }): Observable<Title[]> {
-        params = Object.assign({ page: 0, limit: 0 }, params);
-
-        return this.isAuthenticated$().pipe(
-            switchMap(isAuth => {
-                const path = isAuth ? `/showcases/completed` : `/public/showcases/completed`;
-                return this.request$('GET', environment.apiUrl, path, { ...params });
-            }),
-            map(res => res.list.map((comic: Title) => comic)),
-        );
-    }
     /* ----- MAIN -----*/
 
     /* ----- MY LIB -----*/
@@ -303,11 +294,12 @@ export class ComicService extends BaseService {
 
     // Banner
     getBanners(param: any = {}) {
-        const { category } = param;
+        const { count } = param;
         return this.isAuthenticated$().pipe(
             switchMap(isAuth => {
-                const path = isAuth ? `/banners` : `/public/banners`;
-                return this.request$('GET', environment.apiUrl, path, { category });
+                console.log('isAuth: ', isAuth);
+                const path = isAuth ? `/public/banner-list` : `/public/banner-list`;
+                return this.request$('GET', environment.apiUrl, path, { count });
             }),
         );
     }
