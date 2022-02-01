@@ -71,9 +71,9 @@ export class GenreByWebtoonComponent implements OnInit, OnDestroy {
 
         this.setupReducerListener();
         this.setupInitData();
-        this.setupBottomBar();
-        this.setupScrolledDownEventListener();
-        this.setupBannerListener();
+        // this.setupBottomBar();
+        // this.setupScrolledDownEventListener();
+        // this.setupBannerListener();
     }
 
     ngOnDestroy() {
@@ -196,7 +196,7 @@ export class GenreByWebtoonComponent implements OnInit, OnDestroy {
             map(([genre, isInit]) => genre),
             takeUntil(this.destroyed$)
         );
-        shouldInit$.subscribe(genre => this.getTitles({ genre, page: 0, limit: 10 }));
+        shouldInit$.subscribe(genre => this.getTitles({ genre, page: 0, count: 10 }));
     }
 
     private setupScrolledDownEventListener() {

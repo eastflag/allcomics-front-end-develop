@@ -214,10 +214,10 @@ export class ComicService extends BaseService {
         );
     }
 
-    getGenreTitles(params: { genre: string, page?: number, limit?: number }): Observable<any> {
+    getGenreTitles(params: { genre: string, page?: number, count?: number }): Observable<any> {
         return this.isAuthenticated$().pipe(
             switchMap(isAuth => {
-                const path = isAuth ? `/titles` : `/public/titles`;
+                const path = isAuth ? `/public/webtoon-list` : `/public/webtoon-list`;
                 return this.request$('GET', environment.apiUrl, path, { ...params });
             }),
         );

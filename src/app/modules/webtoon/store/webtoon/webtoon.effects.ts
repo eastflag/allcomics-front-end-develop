@@ -46,13 +46,13 @@ export class WebtoonEffects {
             exhaustMap(([action, originWebtoon]) => {
                 const { params } = action;
                 const { genre, webtoon } = originWebtoon;
-                const detectedGenre = genre === 'romance' ? '' : genre;
+                // const detectedGenre = genre === 'romance' ? '' : genre;
                 const { list: storedList } = webtoon; // stored webtoon data
-                return this.comicService.getGenreTitles({ ...params, genre: detectedGenre }).pipe(
-                    map(({ list: nextList, total, page, limit }) => {
+                return this.comicService.getGenreTitles({ ...params }).pipe(
+                    map(({ list: nextList, total, page, count }) => {
                         const list = page > 0 ? [ ...storedList, ...nextList ] : nextList;
-                        const totalPage = this.utilsService.getTotalPage(total, limit);
-                        const res = { list, total, page, limit, totalPage };
+                        const totalPage = this.utilsService.getTotalPage(total, count);
+                        const res = { list, total, page, count, totalPage };
                         return WebtoonActions.SetWebtoonList({ genre, res });
                     }),
                     tap(() => this.webtoonStore$.dispatch(WebtoonActions.SetIsFetching({ isFetching: false }))),
