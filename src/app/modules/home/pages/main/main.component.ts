@@ -25,6 +25,7 @@ import * as fromHome from '../../store/home.reducer';
 import * as HomeActions from '../../store/home.actions';
 import { Banner } from '@app/models/banner';
 import {MatTabGroup} from '@angular/material';
+import * as moment from 'moment';
 
 export interface UserInfo {
     profile: any;
@@ -71,6 +72,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     // tab Info
     public tabs: { day: string, name: string }[];
     public readonly weeks = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun', 'com'];
+    public readonly weekdays = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
     public selectedIndex = 0;
     public idx = 0;
     @ViewChild('tabGroup', { static: true }) tabGroup: MatTabGroup;
@@ -115,13 +117,18 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     private setupInitData() {
+        // 현재 요일 구하기 및 탭 변경
+        const weekday = this.weekdays[moment().weekday()];
+        this.selectedIndex = this.weeks.findIndex(item => item === weekday);
+        this.homeStore$.dispatch(HomeActions.SetActiveDay({day: weekday}));
+
         const shouldInit$ = this.activeDay$.pipe(
             // withLatestFrom(this.isInit$),
             // filter(([_, isInit]) => !!!isInit),
-            // map(([genre, isInit]) => genre),
+            // map(([day, isInit]) => day),
             takeUntil(this.destroyed$)
         );
-        shouldInit$.subscribe(() => this.getWeeks());
+        shouldInit$.subscribe((day) => this.getWeeks(day));
     }
 
     swipe(e: any, when: any): void {
@@ -155,7 +162,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
         const { index } = tabInfo;
         const activeTab = this.tabs[index];
         const { day } = activeTab;
-        console.log('day: ' + day);
+
         this.homeStore$.dispatch(HomeActions.SetActiveDay({ day }));
     }
 
@@ -280,9 +287,12 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
         this.eventService.emit('toggleSidebar', true);
     }
 
-    getWeeks() {
-        console.log('getWeeks');
-        const params = { page: 0, count: 5 };
+    getWeeks(day: string) {
+        console.log(day);
+        const params = { day, page: 0, count: 5 };
+        // 탭 변경전 데이터 초기화
+        this.homeStore$.dispatch(HomeActions.SetWeeks({weeks: []}));
+        // 데이터 조회
         this.homeStore$.dispatch(HomeActions.FetchWeeks({ params }));
     }
 

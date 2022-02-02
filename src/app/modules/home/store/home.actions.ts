@@ -45,7 +45,7 @@ export const SetGoodsBanner = createAction(
 // Titles
 export const FetchWeeks = createAction(
     '[HOME] Fetch Weeks',
-    props<{ params: { page: number, count: number } }>()
+    props<{ params: { day: string, page: number, count: number } }>()
 );
 
 export const SetWeeks = createAction(
