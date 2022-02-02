@@ -12,6 +12,49 @@
 </div>
 <div class="pd-lr-15">
     <!-- Week Comic-->
+    <div id="week-comics" class="section column-layout"
+         (swipeleft)="swipe(idx, $event.type)" (swiperight)="swipe(idx, $event.type)">
+        <div class="title-section" fxLayout fxLayoutAlign="space-between">
+            <div class="title-content font-medium">
+                <h3>{{ 'main.week.header' | translate }}</h3>
+            </div>
+            <div class="title-action"></div>
+        </div>
+        <mat-tab-group #tabGroup dynamicHeight="false"
+                       [(selectedIndex)]="selectedIndex"
+                       [@.disabled]="true"
+                       (selectedTabChange)="changeTab($event)"
+                       [animationDuration]="'10ms'">
+            <mat-tab *ngFor="let tab of tabs" label="index">
+                <ng-template mat-tab-label>
+                    <p>{{ tab.name | translate }}</p>
+                </ng-template>
+                <div (touchstart)="swipe($event, 'start')"
+                     (touchend)="swipe($event, 'end')">
+                    <div fxLayout="row wrap" *ngIf="weeks$|async">
+                        <ng-container *ngFor="let item of (weeks$|async)">
+                            <div class="comic-item comic-item-10-5" fxFlex.lt-sm="50" fxFlex.md="33" fxFlex.sm="33" (click)="onShowDetail(item.id)">
+                                <div class="comic-thumbnail">
+                                    <div class="container-image container-image-1-1">
+                                        <img class="object-fit_contain" [src]="item.thumbnail.sq" [alt]="item.name">
+                                    </div>
+                                </div>
+                                <div class="comic-summary" fxLayout fxLayoutAlign="start">
+                                    <div class="comic-detail">
+                                        <h3 class="title">
+                                            <span class="short_title" [innerText]="item.name"></span>
+                                        </h3>
+                                        <p>{{ 'common.no-episodes' | translate:{ no: item.validEpisodeCount } }} <span> |&nbsp;</span> {{ (item.age > 0 ? 'common.age-over' : 'common.all-age') | translate:{ age: item.age } }}</p>
+                                        <p>{{ getTranslateGenre(item.genre) }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
 
     <!-- 실시간 랭킹 -->
     <div id="all-comics-ranking" class="section row-layout">

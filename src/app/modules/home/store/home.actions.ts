@@ -45,12 +45,17 @@ export const SetGoodsBanner = createAction(
 // Titles
 export const FetchWeeks = createAction(
     '[HOME] Fetch Weeks',
-    props<{ params: { page: number, limit: number } }>()
+    props<{ params: { page: number, count: number } }>()
 );
 
 export const SetWeeks = createAction(
     '[HOME] Set Weeks',
     props<{ weeks: Title[] }>()
+);
+
+export const SetActiveDay = createAction(
+    '[WEBTOON] Set Active Day',
+    props<{ day: string }>()
 );
 
 export const FetchRankings = createAction(

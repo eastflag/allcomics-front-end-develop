@@ -25,7 +25,6 @@ export class HomeEffects {
         () => this.actions$.pipe(
             ofType(HomeActions.FetchBannerList),
             exhaustMap(action => {
-                console.log(action);
                 const { params } = action;
                 return this.comicsApiService.getBanners({ ...params }).pipe(
                     map((banner: Banner) => HomeActions.SetSlideBanner({slideBanner: banner})),

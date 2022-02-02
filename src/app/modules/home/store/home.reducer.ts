@@ -4,6 +4,8 @@ import * as HomeActions from './home.actions';
 import {Banner, BannerItem} from '@app/models/banner';
 import { Title } from '@app/models/title';
 
+export type WebtoonDay = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun' | 'com';
+
 export interface State {
     // banners
     bannerCount: string;
@@ -13,11 +15,11 @@ export interface State {
     // goodsBanner: Banner;
     // titles
     weeks: Title[];
+    activeDay: WebtoonDay;
     rankings: Title[];
     populars: Title[];
     recentlyUpdated: Title[];
     romance: Title[];
-    boysLove: Title[];
     completed: Title[];
 }
 
@@ -30,11 +32,11 @@ export const initialState: State = {
     // goodsBanner: null,
     // titles
     weeks: null,
+    activeDay: 'mon',
     rankings: null,
     populars: null,
     recentlyUpdated: null,
     romance: null,
-    boysLove: null,
     completed: null,
 };
 
@@ -64,6 +66,10 @@ export const _homeReducer = createReducer(
         ...state,
         weeks,
     })),
+    on(HomeActions.SetActiveDay, (state, { day }) => ({
+        ...state,
+        activeDay: day
+    })),
     on(HomeActions.SetRankings, (state, { rankings }) => ({
         ...state,
         rankings,
@@ -79,10 +85,6 @@ export const _homeReducer = createReducer(
     on(HomeActions.SetRomance, (state, { romance }) => ({
         ...state,
         romance,
-    })),
-    on(HomeActions.SetBoysLove, (state, { boysLove }) => ({
-        ...state,
-        boysLove,
     })),
     on(HomeActions.SetCompleted, (state, { completed }) => ({
         ...state,
@@ -105,9 +107,9 @@ export const getSlideBanner = createSelector(selectHome, (state: State) => state
 // export const getGoodsBanner = createSelector(selectHome, (state: State) => state.goodsBanner);
 // titles
 export const getWeeks = createSelector(selectHome, (state: State) => state.weeks);
+export const getActiveDay = createSelector(selectHome, (state: State) => state.activeDay);
 export const getRankings = createSelector(selectHome, (state: State) => state.rankings);
 export const getPopulars = createSelector(selectHome, (state: State) => state.populars);
 export const getRecentlyUpdated = createSelector(selectHome, (state: State) => state.recentlyUpdated);
 export const getRomance = createSelector(selectHome, (state: State) => state.romance);
-export const getBoysLove = createSelector(selectHome, (state: State) => state.boysLove);
 export const getCompleted = createSelector(selectHome, (state: State) => state.completed);

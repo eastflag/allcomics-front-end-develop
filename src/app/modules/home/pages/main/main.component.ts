@@ -17,10 +17,9 @@ import { Title } from '@app/models/title';
 
 import { Observable, ReplaySubject } from 'rxjs';
 import { select, Store } from '@ngrx/store';
-import { filter, map, switchMap, take, takeUntil, tap, withLatestFrom } from 'rxjs/operators';
+import {distinctUntilChanged, filter, map, switchMap, take, takeUntil, tap, withLatestFrom} from 'rxjs/operators';
 
 import * as fromRoot from '../../../../store/root/root.reducer';
-import * as RootActions from '../../../../store/root/root.actions';
 
 import * as fromHome from '../../store/home.reducer';
 import * as HomeActions from '../../store/home.actions';
@@ -63,56 +62,15 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     public bottomAdsBanner$: Observable<Banner>;
     public goodsBanner$: Observable<Banner>;
     public myPageBanner$: Observable<Banner>;
+    private isInit$: Observable<boolean>;
+    private activeDay$: Observable<string>;
 
     public isProduction = false;
-    // TODO: get idol items via API
-    public adsIdols = [
-        {
-            id: 1,
-            src: 'https://i.imgur.com/p7khVVU.jpg',
-            title: 'SM 아티스트퍼즐 패키지',
-            price: '27',
-            oldPrice: '30',
-            salesPercent: '10'
-        },
-        {
-            id: 2,
-            src: 'https://i.imgur.com/KDbW9jk.png',
-            title: '샤이니 카드지갑 패키지',
-            price: '28',
-            oldPrice: '28',
-            salesPercent: ''
-        },
-        {
-            id: 3,
-            src: 'https://i.imgur.com/p7khVVU.jpg',
-            title: '샤이니 카드지갑 패키지',
-            price: '36',
-            oldPrice: '40',
-            salesPercent: '10'
-        },
-        {
-            id: 4,
-            src: 'https://i.imgur.com/KDbW9jk.png',
-            title: 'SM 아티스트퍼즐 패키지',
-            price: '27',
-            oldPrice: '27',
-            salesPercent: ''
-        },
-        {
-            id: 5,
-            src: 'https://i.imgur.com/p7khVVU.jpg',
-            title: 'SM 아티스트퍼즐 패키지',
-            price: '50',
-            oldPrice: '50',
-            salesPercent: ''
-        }
-    ];
 
     // week comic
     // tab Info
-    public tabs: { week: string, name: string }[];
-    public readonly weeks = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'complete'];
+    public tabs: { day: string, name: string }[];
+    public readonly weeks = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun', 'com'];
     public selectedIndex = 0;
     public idx = 0;
     @ViewChild('tabGroup', { static: true }) tabGroup: MatTabGroup;
@@ -138,7 +96,8 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
         this.setupBannerListener();
         this.setupTitleListener();
         //
-        // this.initTabsInfo();
+        this.initTabsInfo();
+        this.setupInitData();
     }
 
     ngOnDestroy() {
@@ -152,7 +111,17 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     private initTabsInfo() {
-        this.tabs = this.weeks.map(week => ({ week, name: `common.week.${week}` }));
+        this.tabs = this.weeks.map(day => ({ day, name: `common.week.${day}` }));
+    }
+
+    private setupInitData() {
+        const shouldInit$ = this.activeDay$.pipe(
+            // withLatestFrom(this.isInit$),
+            // filter(([_, isInit]) => !!!isInit),
+            // map(([genre, isInit]) => genre),
+            takeUntil(this.destroyed$)
+        );
+        shouldInit$.subscribe(() => this.getWeeks());
     }
 
     swipe(e: any, when: any): void {
@@ -185,8 +154,9 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     changeTab(tabInfo: any) {
         const { index } = tabInfo;
         const activeTab = this.tabs[index];
-        const { week } = activeTab;
-        // this.webtoonStore$.dispatch(WebtoonActions.SetActiveGenre({ genre }));
+        const { day } = activeTab;
+        console.log('day: ' + day);
+        this.homeStore$.dispatch(HomeActions.SetActiveDay({ day }));
     }
 
     scroll(event: any) {
@@ -200,14 +170,15 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     private setupTitleListener() {
-        // this.weeks$ = this.homeStore$.pipe(select(fromHome.getWeeks), filter(title => !!title), takeUntil(this.destroyed$));
+        this.weeks$ = this.homeStore$.pipe(select(fromHome.getWeeks), filter(title => !!title), takeUntil(this.destroyed$));
         this.ranking$ = this.homeStore$.pipe(select(fromHome.getRankings), filter(title => !!title), takeUntil(this.destroyed$));
         this.completed$ = this.homeStore$.pipe(select(fromHome.getCompleted), filter(title => !!title), takeUntil(this.destroyed$));
         this.populars$ = this.homeStore$.pipe(select(fromHome.getPopulars), filter(title => !!title), takeUntil(this.destroyed$));
         this.recentlyUpdated$ = this.homeStore$.pipe(select(fromHome.getRecentlyUpdated), filter(title => !!title), takeUntil(this.destroyed$));
         this.romance$ = this.homeStore$.pipe(select(fromHome.getRomance), filter(title => !!title), takeUntil(this.destroyed$));
-        // this.boysLove$ = this.homeStore$.pipe(select(fromHome.getBoysLove), filter(title => !!title), takeUntil(this.destroyed$));
 
+        // this.isInit$ = this.homeStore$.pipe(select(fromHome.getActiveWebtoonIsInit), takeUntil(this.destroyed$));
+        this.activeDay$ = this.homeStore$.pipe(select(fromHome.getActiveDay), distinctUntilChanged(), takeUntil(this.destroyed$));
 
         // const shouldFetchWeeks$ = this.homeStore$.pipe(select(fromHome.getWeeks), filter(title => !!!title), take(1), takeUntil(this.destroyed$));
         // shouldFetchWeeks$.subscribe(() => this.getWeeks());
@@ -226,18 +197,12 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
 
         const shouldFetchRomance$ = this.homeStore$.pipe(select(fromHome.getRomance), filter(title => !!!title), take(1), takeUntil(this.destroyed$));
         shouldFetchRomance$.subscribe(() => this.getRomance());
-        //
-        // const shouldFetchBoysLove$ = this.homeStore$.pipe(select(fromHome.getBoysLove), filter(title => !!!title), take(1), takeUntil(this.destroyed$));
-        // shouldFetchBoysLove$.subscribe(() => this.getBoysLove());
-        //
-
     }
 
     private setupBannerListener() {
         this.slideBanner$ = this.homeStore$.pipe(select(fromHome.getSlideBanner), filter(banner => !!banner), takeUntil(this.destroyed$));
 
         this.slideBanner$.subscribe(banner => {
-            console.log(';;;;;', banner);
             if (banner.hasOwnProperty('list')) {
                 const { list } = banner;
                 // const slideSpeed = items[0].slideSpeed;
@@ -261,7 +226,6 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
 
         const shouldFetchBannerList$ = this.homeStore$.pipe(select(fromHome.getBanners), filter(banners => !!!banners), take(1), takeUntil(this.destroyed$));
         shouldFetchBannerList$.subscribe(() => {
-            console.log('shouldFetchBannerList$');
             const params = {
                 count: '5'
             };
@@ -317,7 +281,8 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     getWeeks() {
-        const params = { page: 0, limit: 5 };
+        console.log('getWeeks');
+        const params = { page: 0, count: 5 };
         this.homeStore$.dispatch(HomeActions.FetchWeeks({ params }));
     }
 

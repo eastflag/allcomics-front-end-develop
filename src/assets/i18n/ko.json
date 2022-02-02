@@ -9,18 +9,18 @@
             "action": "소년/액션",
             "fantasy": "판타지",
             "blgl": "BL/GL",
-            "adult": "성인",
-            "best": "베스트도전"
+            "manga": "성인",
+            "challenges": "베스트도전"
         },
         "week": {
-            "monday": "월",
-            "tuesday": "화",
-            "wednesday": "수",
-            "thursday": "목",
-            "friday": "금",
-            "saturday": "토",
-            "sunday": "일",
-            "complete": "완결"
+            "mon": "월",
+            "tue": "화",
+            "wed": "수",
+            "thu": "목",
+            "fri": "금",
+            "sat": "토",
+            "sun": "일",
+            "com": "완결"
         },
         "no-episodes": "{{no}}화",
         "all-age": "전체 이용가",
@@ -56,7 +56,7 @@
         "unsubscribe": "회원탈퇴",
         "main": "main",
         "detail": "",
-        "webtoon": "카테고리",
+        "webtoon": "장르별 웹툰",
         "mylib": "내 서재",
         "purchase": "구매 목록",
         "myfavorite": "관심 작품",
@@ -128,7 +128,7 @@
     },
     "footer": {
         "home": "홈",
-        "page": "카테고리",
+        "page": "장르 웹툰",
         "bill": "충전",
         "user": "내 서재"
     },

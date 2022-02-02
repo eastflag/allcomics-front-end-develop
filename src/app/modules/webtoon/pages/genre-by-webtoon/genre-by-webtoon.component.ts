@@ -32,7 +32,7 @@ export class GenreByWebtoonComponent implements OnInit, OnDestroy {
 
     // tab Info
     public tabs: { genre: string, name: string }[];
-    public readonly genres = ['romance', 'drama', 'action', 'fantasy', 'blgl', 'adult', 'best'];
+    public readonly genres = ['romance', 'drama', 'action', 'fantasy', 'blgl', 'manga', 'challenges'];
     public selectedIndex = 0;
     public idx = 0;
 
